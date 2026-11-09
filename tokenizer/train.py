@@ -9,10 +9,10 @@ import time
 import pyarrow.parquet as pq
 from tokenizers import Tokenizer
 
-from stages.tokenizer.config import SPECIAL_TOKENS, VOCAB_SIZE, tokenizer, trainer
+from tokenizer.config import SPECIAL_TOKENS, VOCAB_SIZE, tokenizer, trainer
 
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "dataset" / "project_gutenberg" / "data"
 OUTPUT = Path(__file__).resolve().parent / "artifacts"
 MARKER = r"(?im)^[ \t]*\*{3}[ \t]*%s OF (?:THE|THIS) PROJECT GUTENBERG[^\r\n]*(?:\r?\n|$)"

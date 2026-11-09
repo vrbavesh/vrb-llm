@@ -1,6 +1,6 @@
 import unittest
 
-from stages.tokenizer.train import clean_book, split_books
+from tokenizer.train import clean_book, split_books
 
 
 class PreparationTests(unittest.TestCase):
