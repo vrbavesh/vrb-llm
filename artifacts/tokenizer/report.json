@@ -1,0 +1,33 @@
+{
+  "vocab_size": 16000,
+  "special_token_ids": {
+    "<pad>": 0,
+    "<unk>": 1,
+    "<bos>": 2,
+    "<eos>": 3
+  },
+  "training_seconds": 989.2269759999999,
+  "total_seconds": 2325.957967600001,
+  "train": {
+    "books": 30419,
+    "duplicate_rows_skipped": 18656,
+    "headers_removed": 30402,
+    "footers_removed": 30402,
+    "empty_books": 0,
+    "characters": 12076661474,
+    "utf8_bytes": 12132907441
+  },
+  "test": {
+    "books": 7605,
+    "duplicate_rows_skipped": 4660,
+    "headers_removed": 7601,
+    "footers_removed": 7601,
+    "empty_books": 0,
+    "characters": 3041817715,
+    "utf8_bytes": 3056279850
+  },
+  "test_tokens": 809306541,
+  "test_unknown_tokens": 0,
+  "test_characters_per_token": 3.758548289059238,
+  "all_nonempty_test_books_roundtrip": true
+}
