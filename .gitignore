@@ -3,3 +3,5 @@ HANDOFF.md
 __pycache__/
 dataset/
 .venv/
+model/data/
+model/runs/
