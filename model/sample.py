@@ -9,9 +9,14 @@ with. Generation stops at <eos> and special tokens are stripped from the output.
 
 import argparse
 from pathlib import Path
+import sys
 
 import torch
 from tokenizers import Tokenizer
+
+# Allow `python model\sample.py` as well as `python -m model.sample`.
+if __package__ in (None, ""):
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from model.gpt import GPT, GPTConfig
 
