@@ -81,8 +81,20 @@ def save_checkpoint(path, model, optimizer, step, val_loss, tokens_per_step, bes
         "arch": asdict(ARCH),
     }
     tmp = path.with_name(path.name + ".tmp")
-    torch.save(payload, tmp)
-    os.replace(tmp, path)
+    # A checkpoint is 535 MB. Writing it can fail transiently when something else
+    # saturates the disk, which should not kill a multi-day run: retry instead.
+    last_error = None
+    for attempt in range(3):
+        try:
+            torch.save(payload, tmp)
+            os.replace(tmp, path)
+            return
+        except Exception as error:
+            last_error = error
+            tmp.unlink(missing_ok=True)
+            print(f"  checkpoint write failed (attempt {attempt + 1}/3): {error}", flush=True)
+            time.sleep(3 * (attempt + 1))
+    raise RuntimeError(f"checkpoint save failed for {path}: {last_error}")
 
 
 def prune_history(run_dir, keep=3):
@@ -110,6 +122,9 @@ def main():
 
     run_dir = args.run_dir if args.run_dir.is_absolute() else HERE.parent / args.run_dir
     run_dir.mkdir(parents=True, exist_ok=True)
+    # A crash mid-write leaves a partial .tmp behind; it is never resumable.
+    for stale in run_dir.glob("*.tmp"):
+        stale.unlink(missing_ok=True)
     metrics_path = run_dir / "metrics.jsonl"
     samples_path = run_dir / "samples.txt"
     last_path = run_dir / "last.pt"
