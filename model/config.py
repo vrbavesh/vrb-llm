@@ -1,10 +1,10 @@
 """Confirmed model and training configuration.
 
-Architecture decisions (2026-11-10): 12 layers x 512 width with 8 heads, rotary
-position embeddings, SwiGLU feed-forward, 1024-token context, tied embeddings, and
-pre-norm RMSNorm. Batches and the token budget come from the measured throughput of
-this GPU (see model/bench.py): micro-batch 8 at context 1024 with gradient
-checkpointing uses ~2.3 GiB and sustains ~21,800 tokens/sec.
+Architecture decisions (2026-11-11): 23 layers x 704 width with 11 rotary heads
+(head_dim 64), SwiGLU feed-forward at d_ff 1920, 1024-token context, tied
+embeddings, pre-norm RMSNorm, no dropout, gradient checkpointing on — ~150.2M
+parameters. Batches and the token budget come from the measured throughput of
+this GPU (see model/bench.py).
 """
 
 from dataclasses import dataclass
@@ -15,10 +15,10 @@ from model.gpt import GPTConfig
 ARCH = GPTConfig(
     vocab_size=16_000,
     max_seq_len=1024,
-    n_layer=12,
-    n_head=8,
-    d_model=512,
-    d_ff=1408,  # 8/3 * d_model rounded to a multiple of 128, the usual SwiGLU ratio
+    n_layer=23,
+    n_head=11,
+    d_model=704,
+    d_ff=1920,  # ~2.73 * d_model, rounded to a multiple of 128, SwiGLU ratio
     dropout=0.0,
     tie_embeddings=True,
     checkpointing=True,
